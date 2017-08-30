@@ -1,26 +1,14 @@
 from django.db import models
-
-class StringField(models.TextField):
-    def formfield(self, **kwargs):
-        kwargs['widget'] = widgets.AdminTextInputWidget
-        return super(StringField, self).formfield(**kwargs)
-
-# Create your models here.
-class Partido(models.Model):
-    nome = StringField()
-    sigla =StringField()
-    logo = models.ImageField(blank=True, upload_to='partidos')
-
-class Vereador(models.Model):
-    nome = StringField()
-    partido = models.ForeignKey(Partido)
+from politicos.models import Partido, Politico, StringField
 
 class Local(models.Model):
-    nome = StringField()
+    nome = StringField(primary_key=True)
 
-class Agenda(models.Model):
-    horario_inicio = models.DateTimeField()
-    horario_fim = models.DateTimeField()
-    descricao = models.TextField()
+    def __str__(self):
+        return self.nome
+
+class Evento(models.Model):
+    data = models.DateTimeField()
+    descricao = models.TextField(primary_key=True)
     local = models.ForeignKey(Local)
-    vereador = models.ForeignKey(Vereador)
+    vereador = models.ForeignKey(Politico)
